@@ -15,7 +15,7 @@ async function run(): Promise<void> {
       core.error('Could not get pull request information from context, exiting')
       return
     }
-    if (isNewPR()) {
+    if (!isNewPR()) {
       core.info('This is a new PR.')
 
       const environment = generateEnvironmentPayload(prNumber, branch)
