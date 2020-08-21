@@ -2,13 +2,13 @@ name: 'Mobify Preview'
 description: 'Deploy your GitHub PR to a Mobify environment and preview your site'
 author: 'Mobify'
 inputs:
-  github-token:
+  GITHUB_TOKEN:
     required: true
     description: 'Your GitHub token'
-  mobify-project-id:
+  MOBIFY_PROJECT_ID:
     required: true
     description: 'Your Mobify Project ID'
-  mobify-API-key:
+  MOBIFY_API_KEY:
     required: true
     description: 'Your Mobify API key'
 runs:
