@@ -1,6 +1,6 @@
 import * as core from '@actions/core'
 import {getPrNumber, getPrBranch, isNewPR} from './github'
-import {generateEnvId, fetchEnv} from './mobify'
+import {generateEnvId, fetchEnv, createEnv} from './mobify'
 
 async function run(): Promise<void> {
   try {
@@ -21,7 +21,13 @@ async function run(): Promise<void> {
 
       envId = generateEnvId(prNumber, branch)
       const env = fetchEnv(envId)
-      core.info(JSON.stringify(env))
+      if (!env) {
+        core.info('Creating a new environment for the PR')
+        createEnv(prNumber, branch)
+      } else {
+        core.info('Environment is already created')
+        core.info(JSON.stringify(env))
+      }
     }
   } catch (error) {
     core.setFailed(error.message)

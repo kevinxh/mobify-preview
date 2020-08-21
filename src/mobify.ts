@@ -16,6 +16,16 @@ interface EnvPayload {
   ssr_region: string
 }
 
+interface EnvResult {
+  name: string
+  slug: string
+  hostname: string
+  current_deploy: object
+  ssr_region: string
+  ssr_external_hostname: string
+  ssr_external_domain: string
+}
+
 const generateEnvName = (prNumber: number, branchName: string): string => {
   return `Preview-${prNumber} ${branchName}`
 }
@@ -24,7 +34,7 @@ export const generateEnvId = (prNumber: number, branchName: string): string => {
   return slugify(generateEnvName(prNumber, branchName))
 }
 
-export const generateEnvPayload = (
+const generateEnvPayload = (
   prNumber: number,
   branchName: string
 ): EnvPayload => {
@@ -39,7 +49,7 @@ export const generateEnvPayload = (
   }
 }
 
-export const fetchEnv = async (envId: string): Promise<object> => {
+export const fetchEnv = async (envId: string): Promise<EnvResult | null> => {
   const response = await fetch(
     `https://cloud.mobify.com/api/projects/${MOBIFY_PROJECT_ID}/target/${envId}`,
     {
@@ -49,5 +59,34 @@ export const fetchEnv = async (envId: string): Promise<object> => {
       }
     }
   )
-  return await response.json()
+  const resJson = await response.json()
+  if (!response.ok) {
+    return null
+  }
+
+  return resJson
+}
+
+export const createEnv = async (
+  prNumber: number,
+  branchName: string
+): Promise<EnvResult | null> => {
+  const payload = generateEnvPayload(prNumber, branchName)
+  const response = await fetch(
+    `https://cloud.mobify.com/api/projects/${MOBIFY_PROJECT_ID}/target/`,
+    {
+      method: 'POST',
+      body: JSON.stringify(payload),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `$Bearer ${MOBIFY_API_KEY}`
+      }
+    }
+  )
+  const resJson = await response.json()
+  if (!response.ok) {
+    throw new Error('Failed to create new environment')
+  }
+
+  return resJson
 }
