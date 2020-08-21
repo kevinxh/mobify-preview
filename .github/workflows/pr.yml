@@ -1,5 +1,7 @@
-name: 'PR workflow'
-on: pull_request
+name: 'Mobify Preview workflow'
+on:
+  pull_request:
+    types: [opened, synchronize]
 
 jobs:
   preview:
