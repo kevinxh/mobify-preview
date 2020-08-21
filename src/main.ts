@@ -4,7 +4,18 @@ import {getPrNumber, isNewPR} from './github'
 async function run(): Promise<void> {
   try {
     core.info('-- Mobify Preview --')
-    // const githubToken = core.getInput('github-token', {required: true})
+    const MOBIFY_PROJECT_ID = core.getInput('MOBIFY_PROJECT_ID', {
+      required: true
+    })
+    if (!MOBIFY_PROJECT_ID) {
+      core.error('Missing input MOBIFY_PROJECT_ID, exiting')
+      return
+    }
+    const MOBIFY_API_KEY = core.getInput('MOBIFY_API_KEY', {required: true})
+    if (!MOBIFY_API_KEY) {
+      core.error('Missing input MOBIFY_API_KEY, exiting')
+      return
+    }
     const prNumber = getPrNumber()
     if (!prNumber) {
       core.error('Could not get pull request number from context, exiting')

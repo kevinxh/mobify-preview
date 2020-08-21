@@ -5,6 +5,12 @@ inputs:
   github-token:
     required: true
     description: 'Your GitHub token'
+  mobify-project-id:
+    required: true
+    description: 'Your Mobify Project ID'
+  mobify-API-key:
+    required: true
+    description: 'Your Mobify API key'
 runs:
   using: 'node12'
   main: 'dist/index.js'
