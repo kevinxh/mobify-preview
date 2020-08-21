@@ -9,6 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
+      - run: npm run build && npm run package # this is for action development only
       - uses: ./
         with:
           MOBIFY_PROJECT_ID: ${{ secrets.MOBIFY_PROJECT_ID }}
