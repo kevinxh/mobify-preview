@@ -1,16 +1,19 @@
 import * as core from '@actions/core'
-import {wait} from './wait'
+import * as github from '@actions/github'
+import {getPrNumber} from './github'
 
 async function run(): Promise<void> {
   try {
-    const ms: string = core.getInput('milliseconds')
-    core.debug(`Waiting ${ms} milliseconds ...`) // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
-
-    core.debug(new Date().toTimeString())
-    await wait(parseInt(ms, 10))
-    core.debug(new Date().toTimeString())
-
-    core.setOutput('time', new Date().toTimeString())
+    core.info('-- Mobify Preview --')
+    const payload = JSON.stringify(github.context.payload, undefined, 2)
+    console.log(`The event payload: ${payload}`)
+    // const githubToken = core.getInput('github-token', {required: true})
+    const prNumber = getPrNumber()
+    if (!prNumber) {
+      core.debug('Could not get pull request number from context, exiting')
+      return
+    }
+    core.debug(`PR: ${prNumber}`)
   } catch (error) {
     core.setFailed(error.message)
   }

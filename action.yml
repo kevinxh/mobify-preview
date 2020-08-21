@@ -1,11 +1,10 @@
-name: 'Your name here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'Mobify Preview'
+description: 'Deploy your GitHub PR to a Mobify environment and preview your site'
+author: 'Mobify'
 inputs:
-  milliseconds: # change this
+  github-token:
     required: true
-    description: 'input description here'
-    default: 'default value if applicable'
+    description: 'Your GitHub token'
 runs:
   using: 'node12'
   main: 'dist/index.js'
