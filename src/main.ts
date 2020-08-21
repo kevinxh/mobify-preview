@@ -1,29 +1,25 @@
 import * as core from '@actions/core'
-import {getPrNumber, isNewPR} from './github'
+import {getPrNumber, getPrBranch, isNewPR} from './github'
+import {generateEnvironmentPayload} from './mobify'
 
 async function run(): Promise<void> {
   try {
     core.info('-- Mobify Preview --')
-    const MOBIFY_PROJECT_ID = core.getInput('MOBIFY_PROJECT_ID', {
-      required: true
-    })
-    if (!MOBIFY_PROJECT_ID) {
-      core.error('Missing input MOBIFY_PROJECT_ID, exiting')
-      return
-    }
-    const MOBIFY_API_KEY = core.getInput('MOBIFY_API_KEY', {required: true})
-    if (!MOBIFY_API_KEY) {
-      core.error('Missing input MOBIFY_API_KEY, exiting')
-      return
-    }
+    // const MOBIFY_PROJECT_ID = core.getInput('MOBIFY_PROJECT_ID', {
+    //   required: true
+    // })
+    // const MOBIFY_API_KEY = core.getInput('MOBIFY_API_KEY', {required: true})
     const prNumber = getPrNumber()
-    if (!prNumber) {
-      core.error('Could not get pull request number from context, exiting')
+    const branch = getPrBranch()
+    if (!prNumber || !branch) {
+      core.error('Could not get pull request information from context, exiting')
       return
     }
-
     if (isNewPR()) {
       core.info('This is a new PR.')
+
+      const environment = generateEnvironmentPayload(prNumber, branch)
+      core.info(JSON.stringify(environment))
     }
     core.debug(`PR: ${prNumber}`)
   } catch (error) {
@@ -33,8 +29,7 @@ async function run(): Promise<void> {
 
 run()
 
-/* 
-
+/*
 const contextPayloadSample = {
   after: '5228d3eff0d3a0de47463ee6b59104aaf9532af0',
   action: 'synchronize',
