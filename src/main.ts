@@ -20,10 +20,10 @@ async function run(): Promise<void> {
       core.info('This is a new PR')
 
       envId = generateEnvId(prNumber, branch)
-      const env = fetchEnv(envId)
+      let env = await fetchEnv(envId)
       if (!env) {
         core.info('Creating a new environment for the PR')
-        createEnv(prNumber, branch)
+        env = await createEnv(prNumber, branch)
       } else {
         core.info('Environment is already created')
         core.info(JSON.stringify(env))
