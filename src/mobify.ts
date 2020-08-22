@@ -56,7 +56,7 @@ export const fetchEnv = async (envId: string): Promise<EnvResult | null> => {
     {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `$Bearer ${MOBIFY_API_KEY}`
+        Authorization: `Bearer ${MOBIFY_API_KEY}`
       }
     }
   )
@@ -83,7 +83,7 @@ export const createEnv = async (
       body: JSON.stringify(payload),
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `$Bearer ${MOBIFY_API_KEY}`
+        Authorization: `Bearer ${MOBIFY_API_KEY}`
       }
     }
   )
