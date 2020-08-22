@@ -50,6 +50,7 @@ const generateEnvPayload = (
 }
 
 export const fetchEnv = async (envId: string): Promise<EnvResult | null> => {
+  core.debug('fetchEnv')
   const response = await fetch(
     `https://cloud.mobify.com/api/projects/${MOBIFY_PROJECT_ID}/target/${envId}`,
     {
@@ -60,6 +61,8 @@ export const fetchEnv = async (envId: string): Promise<EnvResult | null> => {
     }
   )
   const resJson = await response.json()
+  core.debug(JSON.stringify(resJson, null, 4))
+  core.debug(`${response.status}`)
   if (!response.ok) {
     return null
   }
@@ -72,6 +75,7 @@ export const createEnv = async (
   branchName: string
 ): Promise<EnvResult | null> => {
   const payload = generateEnvPayload(prNumber, branchName)
+  core.debug('createEnv')
   const response = await fetch(
     `https://cloud.mobify.com/api/projects/${MOBIFY_PROJECT_ID}/target/`,
     {
@@ -84,6 +88,8 @@ export const createEnv = async (
     }
   )
   const resJson = await response.json()
+  core.debug(JSON.stringify(resJson, null, 4))
+  core.debug(`${response.status}`)
   if (!response.ok) {
     throw new Error('Failed to create new environment')
   }
