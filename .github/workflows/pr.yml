@@ -1,0 +1,16 @@
+name: 'Mobify Preview workflow'
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  preview:
+    name: Preview
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - run: npm i && npm run build && npm run package # this is for action development only
+      - uses: ./
+        with:
+          MOBIFY_PROJECT_ID: ${{ secrets.MOBIFY_PROJECT_ID }}
+          MOBIFY_API_KEY: ${{ secrets.MOBIFY_API_KEY }}
